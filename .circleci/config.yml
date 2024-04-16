@@ -20,14 +20,11 @@ jobs:
           name: Login Docker
           command: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - run:
-          name: Build Docker image
-          command: docker build -t "myflaskapp" .
-      - run:
-          name: Tag Docker image
-          command: docker tag myflaskapp:latest kelvin3118/container-assignment:latest
-      - run:
-          name: Push Docker image
-          command: docker push kelvin3118/container-assignment:latest
+          name: build-and-push
+          command: |
+            docker build -t "myflaskapp" .
+            docker tag myflaskapp:latest kelvin3118/container-assignment:latest
+            docker push kelvin3118/container-assignment:latest
 
 # workflow - defines what sequence the jobs will run
 workflows:
