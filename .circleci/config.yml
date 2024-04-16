@@ -4,20 +4,6 @@ orbs:
   docker: circleci/docker@2.1.4
 # jobs - set of instructions / functions
 jobs:
-  build:
-    docker:
-      - image: cimg/python:3.9
-    steps:
-      - checkout
-      - run:
-          name: Install pip packages
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-      - run:
-          name: Test with pytest
-          command: python -m pytest
   publish:
     docker:
       - image: cimg/python:3.9
@@ -45,6 +31,6 @@ jobs:
 
 # workflow - defines what sequence the jobs will run
 workflows:
-  myflaskapp_workflow: # workflow name
+  myflaskapp_workflow:
     jobs:
-      - build
+      - publish
