@@ -5,26 +5,15 @@ orbs:
 # jobs - set of instructions / functions
 jobs:
   publish:
-    docker:
-      - image: cimg/python:3.9
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+    executor: docker/docker #define the execution environment in which the steps of a job will run
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: Logout Docker
-          command: docker logout
-      - run:
-          name: Login Docker
-          command: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-      - run:
-          name: build-and-push
-          command: |
-            docker build -t "myflaskapp" .
-            docker tag myflaskapp:latest kelvin3118/container-assignment:latest
-            docker push kelvin3118/container-assignment:latest
+      - docker/check
+      - docker/build: #build the image
+          image: kelvin3118/container-assignment
+      - docker/push: #pushes the image to the specified account in the environment
+          image: kelvin3118/container-assignment
 
 # workflow - defines what sequence the jobs will run
 workflows:

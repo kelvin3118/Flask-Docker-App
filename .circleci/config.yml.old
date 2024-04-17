@@ -1,0 +1,33 @@
+version: 2.1
+# orbs - reusable packages
+orbs:
+  docker: circleci/docker@2.1.4
+# jobs - set of instructions / functions
+jobs:
+  publish:
+    docker:
+      - image: cimg/python:3.9
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Logout Docker
+          command: docker logout
+      - run:
+          name: Login Docker
+          command: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+      - run:
+          name: build-and-push
+          command: |
+            docker build -t "myflaskapp" .
+            docker tag myflaskapp:latest kelvin3118/container-assignment:latest
+            docker push kelvin3118/container-assignment:latest
+
+# workflow - defines what sequence the jobs will run
+workflows:
+  myflaskapp_workflow:
+    jobs:
+      - publish
