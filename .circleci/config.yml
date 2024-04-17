@@ -12,7 +12,7 @@ jobs:
       - docker/check
       - docker/build: #build the image
           image: kelvin3118/container-assignment
-      - docker/push: #pushes the image to the specified account in the environment
+      - docker/push: #pushes the image to the specified account
           image: kelvin3118/container-assignment
 
 # workflow - defines what sequence the jobs will run
